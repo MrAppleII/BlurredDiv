@@ -9,8 +9,13 @@ class BlurDiv extends Component {
   }
   componentDidMount() {
     this.setPlaceholderText()
-  }
+    window.addEventListener("resize", this.setPlaceholderText)
 
+  }
+  componentWillUnmount() {
+
+    window.removeEventListener("resize", this.setPlaceholderText)
+  }
   setPlaceholderText = () => {
       let elemHeight = this.getCurrentHeight()
       let elemWidth =  this.getCurrentWidth()
@@ -40,7 +45,11 @@ class BlurDiv extends Component {
   render() {
     try {
       return (
-        <LayoutWrapper>
+        <LayoutWrapper
+        style={this.props.style}
+        height={this.state.divHeight}
+        width={this.state.divWidth}
+        >
           <PlaceholderLayout
             height={this.state.divHeight}
             width={this.state.divWidth}
@@ -84,12 +93,13 @@ const PlaceholderLayout = styled.div`
   position:absolute;
   align-content: center;
   justify-content: center;
-  width: ${props => (props.width ? props.width + "px" : "auto")};
-  height: ${props => (props.height ? props.height + "px" : "auto")};
+  width: 100%;
+  height: 100%;
 `
 const LayoutWrapper = styled.div`
   position: relative;
- margin-left:auto;
- margin-right:auto;
+  margin: 0 auto;
+  width: ${props => (props.width ? props.width + "px" : "auto")};
+  height: ${props => (props.height ? props.height + "px" : "auto")};
 `
 export default BlurDiv
